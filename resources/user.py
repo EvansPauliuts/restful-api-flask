@@ -1,4 +1,5 @@
-from flask_restful import Resource, reqparse
+from flask_restful import Resource
+from flask import request
 from werkzeug.security import safe_str_cmp
 from flask_jwt_extended import (
     create_access_token,
@@ -8,6 +9,8 @@ from flask_jwt_extended import (
     get_jwt,
 )
 from starlette import status
+
+from schemas.user import UserSchema
 from models.user import UserModel
 from blacklist import BLACKLIST
 
@@ -19,25 +22,19 @@ USER_DELETED = "User deleted."
 INVALID_CREDENTIALS = "Invalid credentials!"
 USER_LOGGED_OUT = "User <id={}> successfully logged out."
 
-_user_parser = reqparse.RequestParser()
-_user_parser.add_argument(
-    "username", type=str, required=True, help=BLANK_ERROR.format("username")
-)
-_user_parser.add_argument(
-    "password", type=str, required=True, help=BLANK_ERROR.format("password")
-)
+user_schema = UserSchema()
 
 
 class UserRegister(Resource):
     @classmethod
     def post(cls):
-        data = _user_parser.parse_args()
+        user_json = request.get_json()
+        user_data = user_schema.load(user_json)
 
-        if UserModel.find_by_username(data["username"]):
+        if UserModel.find_by_username(user_data.username):
             return {"message": USER_ALREADY_EXISTS}, status.HTTP_400_BAD_REQUEST
 
-        user = UserModel(**data)
-        user.save_to_db()
+        user_data.save_to_db()
 
         return {"message": CREATED_SUCCESSFULLY}, status.HTTP_201_CREATED
 
@@ -48,7 +45,7 @@ class User(Resource):
         user = UserModel.find_by_id(user_id)
         if not user:
             return {"message": USER_NOT_FOUND}, status.HTTP_404_NOT_FOUND
-        return user.json(), status.HTTP_200_OK
+        return user_schema.dump(user), status.HTTP_200_OK
 
     @classmethod
     def delete(cls, user_id: int):
@@ -62,11 +59,12 @@ class User(Resource):
 class UserLogin(Resource):
     @classmethod
     def post(cls):
-        data = _user_parser.parse_args()
+        user_json = request.get_json()
+        user_data = user_schema.load(user_json)
 
-        user = UserModel.find_by_username(data["username"])
+        user = UserModel.find_by_username(user_data.username)
 
-        if user and safe_str_cmp(user.password, data["password"]):
+        if user and safe_str_cmp(user.password, user_data.password):
             access_token = create_access_token(identity=user.id, fresh=True)
             refresh_token = create_refresh_token(user.id)
             return {
