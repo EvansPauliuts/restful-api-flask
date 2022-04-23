@@ -1,6 +1,9 @@
+from flask import request, url_for
 from typing import Dict, Union
+from requests import Response
 
 from db import db
+from libs.mailgun import MailGun
 
 UserJSON = Dict[str, Union[str, int]]
 
@@ -11,6 +14,8 @@ class UserModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
+    email = db.Column(db.String(80), nullable=False, unique=True)
+    activated = db.Column(db.Boolean, default=False)
 
     def json(self) -> UserJSON:
         return {"id": self.id, "username": self.username}
@@ -20,8 +25,20 @@ class UserModel(db.Model):
         return cls.query.filter_by(username=username).first()
 
     @classmethod
+    def find_by_email(cls, email: str) -> "UserModel":
+        return cls.query.filter_by(email=email).first()
+
+    @classmethod
     def find_by_id(cls, _id: int) -> "UserModel":
         return cls.query.filter_by(id=_id).first()
+
+    def send_confirmation_email(self) -> Response:
+        link = request.url_root[:-1] + url_for("userconfirm", user_id=self.id)
+        subject = "Registration confirmation"
+        text = f"Please click the link to confirm your registration: {link}"
+        html = f'<html>Please click the link to confirm your registration: <a href="{link}">{link}</a></html>'
+
+        return MailGun.send_email([self.email], subject=subject, text=text, html=html)
 
     def save_to_db(self) -> None:
         db.session.add(self)
