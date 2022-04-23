@@ -7,11 +7,7 @@ from starlette import status
 
 from schemas.item import ItemSchema
 from models.item import ItemModel
-
-NAME_ALREADY_EXISTS = "An item with name '{}' already exists."
-ERROR_INSERTING = "An error occurred while inserting the item."
-ITEM_NOT_FOUND = "Item not found."
-ITEM_DELETE = "Item deleted."
+from libs.strings import gettext
 
 item_schema = ItemSchema()
 item_list_schema = ItemSchema(many=True)
@@ -26,14 +22,14 @@ class Item(Resource):
         if item:
             return item_schema.dump(item), status.HTTP_200_OK
 
-        return {"message": ITEM_NOT_FOUND}, status.HTTP_404_NOT_FOUND
+        return {"message": gettext("item_not_found")}, status.HTTP_404_NOT_FOUND
 
     @classmethod
     @jwt_required(fresh=True)
     def post(cls, name: str):
         if ItemModel.find_by_name(name):
             return {
-                "message": NAME_ALREADY_EXISTS.format(name)
+                "message": gettext("item_name_exists").format(name)
             }, status.HTTP_400_BAD_REQUEST
 
         item_json = request.get_json()
@@ -44,7 +40,9 @@ class Item(Resource):
         try:
             item.save_to_db()
         except:
-            return {"message": ERROR_INSERTING}, status.HTTP_500_INTERNAL_SERVER_ERROR
+            return {
+                "message": gettext("item_error_inserting")
+            }, status.HTTP_500_INTERNAL_SERVER_ERROR
 
         return item_schema.dump(item), status.HTTP_201_CREATED
 
@@ -55,9 +53,9 @@ class Item(Resource):
 
         if item:
             item.delete_from_db()
-            return {"message": ITEM_DELETE}, status.HTTP_200_OK
+            return {"message": gettext("item_deleted")}, status.HTTP_200_OK
 
-        return {"message": ITEM_NOT_FOUND}, status.HTTP_404_NOT_FOUND
+        return {"message": gettext("item_not_found")}, status.HTTP_404_NOT_FOUND
 
     @classmethod
     def put(cls, name: str):
