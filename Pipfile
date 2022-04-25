@@ -32,15 +32,13 @@ PyJWT = "==2.3.0"
 SQLAlchemy = "==1.4.35"
 Werkzeug = "==2.0.0"
 marshmallow = "==3.15.0"
-flask-marshmallow = "*"
+flask-marshmallow = "==0.14.0"
 marshmallow-sqlalchemy = "*"
 requests = "*"
 python-dotenv = "*"
+flask-uploads = "*"
 
 [dev-packages]
 
 [requires]
 python_version = "3.9"
-
-[pipenv]
-allow_prereleases = true

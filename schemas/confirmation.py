@@ -8,3 +8,4 @@ class ConfirmationSchema(ma.SQLAlchemyAutoSchema):
         load_only = ("user",)
         dump_only = ("id", "expired_at", "confirmed")
         include_fk = True
+        load_instance = True

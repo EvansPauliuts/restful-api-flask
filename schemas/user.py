@@ -8,6 +8,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
         model = UserModel
         load_only = ("password",)
         dump_only = ("id", "confirmation")
+        load_instance = True
 
     @pre_dump
     def _pre_dump(self, user: UserModel):

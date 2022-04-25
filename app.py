@@ -1,9 +1,11 @@
+import sys
 import os
 
 from flask import Flask, jsonify
 from flask_restful import Api
 from flask_jwt_extended import JWTManager
 from marshmallow import ValidationError
+from flask_uploads import configure_uploads, patch_request_class
 from starlette import status
 from dotenv import load_dotenv
 
@@ -20,19 +22,18 @@ from resources.item import Item, ItemList
 from resources.store import Store, StoreList
 from ma import ma
 from resources.confirmation import Confirmation, ConfirmationByUser
+from resources.image import ImageUpload, Image, AvatarUpload, Avatar
+from libs.image_helper import IMAGE_SET
 
-load_dotenv(".env.test")
+envars = os.path.join(os.path.dirname(sys.argv[0]), ".env.dev")
 
 app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SQLALCHEMY_DATABASE_URI")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["PROPAGATE_EXCEPTIONS"] = True
-app.config["JWT_BLACKLIST_ENABLED"] = True
-app.config["JWT_BLACKLIST_TOKEN_CHECKS"] = [
-    "access",
-    "refresh",
-]
-app.secret_key = os.getenv("SECRET_KEY")
+load_dotenv(envars, verbose=True)
+app.config.from_object("default_config")
+app.config.from_envvar("APPLICATION_SETTINGS", silent=True)
+patch_request_class(app, 10 * 1024 * 1024)
+configure_uploads(app, IMAGE_SET)
+
 api = Api(app)
 
 
@@ -65,8 +66,12 @@ api.add_resource(TokenRefresh, "/refresh")
 api.add_resource(UserLogout, "/logout")
 api.add_resource(Confirmation, "/user_confirmation/<string:confirmation_id>")
 api.add_resource(ConfirmationByUser, "/confirmation/user/<int:user_id>")
+api.add_resource(ImageUpload, "/upload/image")
+api.add_resource(Image, "/image/<string:filename>")
+api.add_resource(AvatarUpload, "/upload/avatar")
+api.add_resource(Avatar, "/avatar/<int:user_id>")
 
 if __name__ == "__main__":
     db.init_app(app)
     ma.init_app(app)
-    app.run(port=5000, debug=True)
+    app.run(port=5000)

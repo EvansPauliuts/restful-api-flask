@@ -13,11 +13,11 @@ class ConfirmationModel(db.Model):
     expire_at = db.Column(db.Integer, nullable=False)
     confirmed = db.Column(db.Boolean, nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    user = db.relationship("UserModel")
+    user = db.relationship("UserModel", back_populates="confirmation")
 
     def __init__(self, user_id: int, **kwargs):
         super().__init__(**kwargs)
-        self.id = user_id
+        self.user_id = user_id
         self.id = uuid4().hex
         self.expire_at = int(time()) + CONFIRMATION_EXPIRATION_DELTA
         self.confirmed = False

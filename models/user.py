@@ -18,12 +18,15 @@ class UserModel(db.Model):
     email = db.Column(db.String(80), nullable=False, unique=True)
 
     confirmation = db.relationship(
-        "ConfirmationModel", lazy="dynamic", cascade="all, delete-orphan"
+        "ConfirmationModel",
+        lazy="dynamic",
+        back_populates="user",
+        cascade="all, delete-orphan",
     )
 
     @property
     def most_recent_confirmation(self) -> "ConfirmationModel":
-        self.confirmation.order_by(db.desc(ConfirmationModel.expire_at)).first()
+        return self.confirmation.order_by(db.desc(ConfirmationModel.expire_at)).first()
 
     @classmethod
     def find_by_username(cls, username: str) -> "UserModel":
