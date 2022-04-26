@@ -37,6 +37,8 @@ marshmallow-sqlalchemy = "*"
 requests = "*"
 python-dotenv = "*"
 flask-uploads = "*"
+flask-migrate = "*"
+psycopg2 = "*"
 
 [dev-packages]
 
