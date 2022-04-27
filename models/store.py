@@ -1,7 +1,6 @@
-# from models.item import ItemModel
 from typing import List
 
-from db import db
+from database.db import db
 
 
 class StoreModel(db.Model):
@@ -10,7 +9,7 @@ class StoreModel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False, unique=True)
 
-    items = db.relationship("ItemModel", lazy="dynamic", back_populates="store")
+    items = db.relationship("ItemModel", lazy="dynamic")
 
     @classmethod
     def find_by_name(cls, name) -> "StoreModel":

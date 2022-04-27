@@ -1,6 +1,8 @@
 from typing import List
 
-from db import db
+from database.db import db
+from typing import List
+
 from models.store import StoreModel
 
 
@@ -8,11 +10,11 @@ class ItemModel(db.Model):
     __tablename__ = "items"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), unique=True, nullable=False)
+    name = db.Column(db.String(80), nullable=False, unique=True)
     price = db.Column(db.Float(precision=2), nullable=False)
 
     store_id = db.Column(db.Integer, db.ForeignKey("stores.id"), nullable=False)
-    store = db.relationship("StoreModel", back_populates="items")
+    store = db.relationship("StoreModel")
 
     @classmethod
     def find_by_name(cls, name: str) -> "ItemModel":

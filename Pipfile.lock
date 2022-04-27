@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "d72584e8479e1ace8a31a46b77560241de82611375fadbf8912bc1e83fd9ff97"
+            "sha256": "f8849c5b1b860c42fc2df4447a94613123d3031a86b075aeea22b3f7156094b9"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -69,6 +69,14 @@
             "index": "pypi",
             "version": "==22.3.0"
         },
+        "cachelib": {
+            "hashes": [
+                "sha256:0baa926a23924c04ae1354091478b15b3b24e6cf5931dd159452afda5f65babd",
+                "sha256:6da323fdb16c9f53424a229132646a469b2d046e687fa353b92303910c99bc18"
+            ],
+            "markers": "python_version >= '3.6'",
+            "version": "==0.6.0"
+        },
         "certifi": {
             "hashes": [
                 "sha256:78884e7c1d4b00ce3cea67b44566851c4343c120abd683433ce934a68ea58872",
@@ -123,6 +131,14 @@
             ],
             "index": "pypi",
             "version": "==3.1.0"
+        },
+        "flask-oauthlib": {
+            "hashes": [
+                "sha256:5bb79c8a8e670c2eb4cb553dfc3283b6c8d1202f674934676dc173cee94fe39c",
+                "sha256:a5c3b62959aa1922470a62b6ebf4273b75f1c29561a7eb4a69cde85d45a1d669"
+            ],
+            "index": "pypi",
+            "version": "==0.9.6"
         },
         "flask-restful": {
             "hashes": [
@@ -318,6 +334,13 @@
             "index": "pypi",
             "version": "==0.4.3"
         },
+        "oauthlib": {
+            "hashes": [
+                "sha256:ac35665a61c1685c56336bda97d5eefa246f1202618a1d6f34fccb1bdd404162",
+                "sha256:d883b36b21a6ad813953803edfa563b1b579d79ca758fe950d1bc9e8b326025b"
+            ],
+            "version": "==2.1.0"
+        },
         "packaging": {
             "hashes": [
                 "sha256:dd47c42927d89ab911e606518907cc2d3a1f38bbd026385970643f9c5b8ecfeb",
@@ -399,6 +422,14 @@
             "index": "pypi",
             "version": "==2.27.1"
         },
+        "requests-oauthlib": {
+            "hashes": [
+                "sha256:490229d14a98e1b69612dcc1a22887ec14f5487dc1b8c6d7ba7f77a42ce7347b",
+                "sha256:be76f2bb72ca5525998e81d47913e09b1ca8b7957ae89b46f787a79e68ad5e61",
+                "sha256:eabd8eb700ebed81ba080c6ead96d39d6bdc39996094bd23000204f6965786b0"
+            ],
+            "version": "==1.1.0"
+        },
         "six": {
             "hashes": [
                 "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926",
@@ -459,11 +490,11 @@
         },
         "starlette": {
             "hashes": [
-                "sha256:4a1a92aa89dbacc3a4c694a2c112863e88449730ff99b421a9b71fb2213bcd9c",
-                "sha256:de752c8f6c2ac6ef78bfe44058fc61dc04895eba24d4e47d2ae254ba5c125c5e"
+                "sha256:5a60c5c2d051f3a8eb546136aa0c9399773a689595e099e0877704d5888279bf",
+                "sha256:c6d21096774ecb9639acad41b86b7706e52ba3bf1dc13ea4ed9ad593d47e24c7"
             ],
             "index": "pypi",
-            "version": "==0.19.0"
+            "version": "==0.19.1"
         },
         "tomli": {
             "hashes": [
