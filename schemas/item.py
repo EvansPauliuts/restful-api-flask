@@ -1,4 +1,4 @@
-from ma import ma
+from serializers.ma import ma
 from models.item import ItemModel
 
 

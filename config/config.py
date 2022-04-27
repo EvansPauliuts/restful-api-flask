@@ -10,3 +10,4 @@ JWT_BLACKLIST_TOKEN_CHECKS = [
     "access",
     "refresh",
 ]
+SECRET_KEY = os.getenv("APP_SECRET_KEY")

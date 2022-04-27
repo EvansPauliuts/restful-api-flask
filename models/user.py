@@ -2,7 +2,7 @@ from flask import request, url_for
 from typing import Dict, Union
 from requests import Response
 
-from db import db
+from database.db import db
 from libs.mailgun import MailGun
 from .confirmation import ConfirmationModel
 
@@ -14,15 +14,18 @@ class UserModel(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
-    password = db.Column(db.String(80), nullable=False)
-    email = db.Column(db.String(80), nullable=False, unique=True)
+    # password = database.Column(database.String(80), nullable=False)
+    # email = db.Column(db.String(80), nullable=False, unique=True)
 
-    confirmation = db.relationship(
-        "ConfirmationModel",
-        lazy="dynamic",
-        back_populates="user",
-        cascade="all, delete-orphan",
-    )
+    # oauth
+    password = db.Column(db.String(80))
+
+    # confirmation = database.relationship(
+    #     "ConfirmationModel",
+    #     lazy="dynamic",
+    #     back_populates="user",
+    #     cascade="all, delete-orphan",
+    # )
 
     @property
     def most_recent_confirmation(self) -> "ConfirmationModel":
